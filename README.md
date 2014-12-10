@@ -10,7 +10,7 @@ The file `iptables.up.rules` contains a minimal configuration that exhaustively 
   - icmp (ping) requests and replies
   - udp port 53 (dns) outbound from `eth0` interface
 
-- FROWARD
+- FORWARD
   -nothing (default DROP)
 
 - OUTPUT
@@ -35,16 +35,19 @@ Dropped packets are logged in a limit of 2 per minute with a log-level of 7
 
 - Copy the `iptables.up.rules` file in your `/etc` directory
 
-    $ (sudo) cp iptables.up.rules /etc/
+```
+$ (sudo) cp iptables.up.rules /etc/
+```
 
 - Copy the startup script `iptables.startup` in the `/etc/network/if-pre-up.d/` directory
 
-    $ (sudo) cp iptables.startup /etc/network/if-pre-up.d/iptables
-    $ (sudo) chmod +x /etc/network/if-pre-up.d/iptables
+```
+$ (sudo) cp iptables.startup /etc/network/if-pre-up.d/iptables
+$ (sudo) chmod +x /etc/network/if-pre-up.d/iptables
+```
 
 
-
-# Sources
+# References
 
 - http://crm.vpscheap.net/knowledgebase.php?action=displayarticle&id=29
 - https://wiki.debian.org/iptables
