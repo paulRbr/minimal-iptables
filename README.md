@@ -1,14 +1,17 @@
 # Minimal IPTABLES firewall
 
-The file `iptables.up.rules` contains a minimal configuration that exhaustively does:
+## Client configuration
 
-## ACCEPTs
+The file `iptables.up.client.rules` contains a minimal configuration for client configuration:
+
+_this configuration does not limit to a specific network interface_
+
+### ACCEPTs
 
 - INPUT
   - all on `lo` loopback interface
-  - tcp ports 443 (https) and 22 (ssh) from everywhere on `eth0` interface
+  - Allow already established tcp & udp connections
   - icmp (ping) requests and replies
-  - udp port 53 (dns) outbound from `eth0` interface
 
 - FORWARD
   -nothing (default DROP)
@@ -16,11 +19,36 @@ The file `iptables.up.rules` contains a minimal configuration that exhaustively 
 - OUTPUT
   -all (trust internal users)
 
-## DROPs
+### DROPs
 
 It obviously drops all the rest.
 
-## Extra
+## Server configuration
+
+The file `iptables.up.server.rules` contains a minimal configuration for basic server configuration:
+
+_this configuration limits rules to a specific network interface `eth0`_
+
+### ACCEPTs
+
+- INPUT
+  - all on `lo` loopback interface
+  - Allow new tcp connection on ports 80/443 (http/https web server) and 22 (ssh server) on `eth0` interface
+  - Allow already established tcp & udp connections
+  - Allow new udp connection on port 53 (dns server) on `eth0` interface
+  - icmp (ping) requests and replies
+
+- FORWARD
+  -nothing (default DROP)
+
+- OUTPUT
+  -all (trust internal users)
+
+### DROPs
+
+It obviously drops all the rest.
+
+### Extra
 
 ### Prevent DoS Attack
 
@@ -30,13 +58,12 @@ Limits a maximum of 50 connection per minute after a total of 100 connection rea
 
 Dropped packets are logged in a limit of 2 per minute with a log-level of 7
 
+## Installation
 
-# Installation
-
-- Copy the `iptables.up.rules` file in your `/etc` directory
+- Copy the `iptables.up.client.rules` or `iptables.up.server.rules` file in your `/etc` directory
 
 ```
-$ (sudo) cp iptables.up.rules /etc/
+$ (sudo) cp iptables.up.client.rules /etc/iptables.up.rules
 ```
 
 - Copy the startup script `iptables.startup` in the `/etc/network/if-pre-up.d/` directory
@@ -47,7 +74,7 @@ $ (sudo) chmod +x /etc/network/if-pre-up.d/iptables
 ```
 
 
-# References
+## References
 
 - http://crm.vpscheap.net/knowledgebase.php?action=displayarticle&id=29
 - https://wiki.debian.org/iptables
